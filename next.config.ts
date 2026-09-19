@@ -2,14 +2,14 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  async rewrites(){
-    return[
+  async rewrites() {
+    return [
       {
-        source:"/api/:path*",
-        destination:"https://dev.dreamerz.net/docs/#/Payouts/:path"
-      }
-    ]
-  }
+        source: "/api/:path*",
+        destination: "https://dev.dreamerz.net/api/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

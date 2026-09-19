@@ -61,33 +61,36 @@ import type {
 } from "./types";
 
 export async function health(config?: RequestConfig) {
-  const response = await api.get<ApiResponse>("/_health", config);
+  const response = await api.get<ApiResponse>("/api/v1/_health", config);
   return response.data;
 }
 
 export async function register(payloud: RegisterDto) {
-  const response = await api.post<RegisterResponse>("/auth/register", payloud);
+  const response = await api.post<RegisterResponse>(
+    "/v1/auth/register",
+    payloud,
+  );
   return response.data;
 }
 
 export async function login(payloud: LoginDto) {
-  const response = await api.post<LoginResponse>("/auth/login", payloud);
+  const response = await api.post<LoginResponse>("/v1/auth/login", payloud);
   return response.data;
 }
 
 export async function refresh(config?: RequestConfig) {
-  const response = await api.get<RegisterResponse>("/auth/refresh", config);
+  const response = await api.get<RegisterResponse>("/v1/auth/refresh", config);
   return response.data;
 }
 
 export async function profile(config?: RequestConfig) {
-  const response = await api.get<ProfileDto>("/auth/profile", config);
+  const response = await api.get<ProfileDto>("/v1/auth/profile", config);
   return response.data;
 }
 
 export async function updateProfile(payloud: UpdateProfileDto) {
   const response = await api.patch<UpdateProfileResponse>(
-    "/auth/profile",
+    "/v1/auth/profile",
     payloud,
   );
   return response.data;
@@ -95,7 +98,7 @@ export async function updateProfile(payloud: UpdateProfileDto) {
 
 export async function dreams(config?: RequestConfig) {
   const response = await api.get<PageDto<DreamDto>>(
-    "/auth/profile/dreams",
+    "/v1/auth/profile/dreams",
     config,
   );
   return response.data;
@@ -106,7 +109,7 @@ export async function donationsDreams(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<DonationDto>>(
-    `/auth/profile/dreams/${dreamId}/donations`,
+    `/v1/auth/profile/dreams/${dreamId}/donations`,
     config,
   );
   return response.data;
@@ -117,7 +120,7 @@ export async function commentsDreams(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<DreamCommentDto>>(
-    `/auth/profile/dreams/${dreamId}/comments`,
+    `/v1/auth/profile/dreams/${dreamId}/comments`,
     config,
   );
   return response.data;
@@ -125,7 +128,7 @@ export async function commentsDreams(
 
 export async function wingDonations(config?: RequestConfig) {
   const response = await api.get<PageDto<WingDonationDto>>(
-    "/auth/profile/wing-donations",
+    "/v1/auth/profile/wing-donations",
     config,
   );
   return response.data;
@@ -133,7 +136,7 @@ export async function wingDonations(config?: RequestConfig) {
 
 export async function wingDonationsAll(config?: RequestConfig) {
   const response = await api.get<string[]>(
-    "/auth/profile/wing-donations/all",
+    "/v1/auth/profile/wing-donations/all",
     config,
   );
   return response.data;
@@ -141,7 +144,7 @@ export async function wingDonationsAll(config?: RequestConfig) {
 
 export async function donations(config?: RequestConfig) {
   const response = await api.get<PageDto<DonationDto>>(
-    "/auth/profile/donations",
+    "/v1/auth/profile/donations",
     config,
   );
   return response.data;
@@ -149,7 +152,7 @@ export async function donations(config?: RequestConfig) {
 
 export async function donationsAll(config?: RequestConfig) {
   const response = await api.get<string[]>(
-    "/auth/profile/donations/all",
+    "/v1/auth/profile/donations/all",
     config,
   );
   return response.data;
@@ -157,7 +160,7 @@ export async function donationsAll(config?: RequestConfig) {
 
 export async function forgetPassword(payloud: ForgotPasswordDto) {
   const response = await api.post<ForgotPasswordResponse>(
-    "/auth/profile/forgot-password",
+    "/v1/auth/profile/forgot-password",
     payloud,
   );
   return response.data;
@@ -165,37 +168,37 @@ export async function forgetPassword(payloud: ForgotPasswordDto) {
 
 export async function replacePassword(payloud: ReplacePasswordDto) {
   const response = await api.post<ReplacePasswordResponse>(
-    "/auth/profile/replace-password",
+    "/v1/auth/profile/replace-password",
     payloud,
   );
   return response.data;
 }
 
 export async function usersId(userId: ResourceId, config?: RequestConfig) {
-  const response = await api.get<UserDto>(`/users/${userId}`, config);
+  const response = await api.get<UserDto>(`/v1/users/${userId}`, config);
   return response.data;
 }
 
 export async function shortUsersId(userId: ResourceId, config?: RequestConfig) {
   const response = await api.get<UserShortInfoDto>(
-    `/users/${userId}/short`,
+    `/v1/users/${userId}/short`,
     config,
   );
   return response.data;
 }
 
 export async function users(config?: RequestConfig) {
-  const response = await api.get<UserDto[]>("/users", config);
+  const response = await api.get<UserDto[]>("/v1/users", config);
   return response.data;
 }
 
 export async function messageUsers(config?: RequestConfig) {
-  const response = await api.get<UserDto[]>("/message-users", config);
+  const response = await api.get<UserDto[]>("/v1/message-users", config);
   return response.data;
 }
 
 export async function usersDeleted(config?: RequestConfig) {
-  const response = await api.get<PageDto<UserDto>>("/admin/users", config);
+  const response = await api.get<PageDto<UserDto>>("/v1/admin/users", config);
   return response.data;
 }
 
@@ -204,34 +207,34 @@ export async function deleteUserById(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/admin/users/${userId}`,
+    `/v1/admin/users/${userId}`,
     config,
   );
   return response.data;
 }
 
 export async function restoreUserById(userId: ResourceId) {
-  const response = await api.patch<void>(`/admin/restore/users/${userId}`);
+  const response = await api.patch<void>(`/v1/admin/restore/users/${userId}`);
   return response.data;
 }
 
 export async function exportUsers(config?: RequestConfig) {
-  const response = await api.get<Blob>("/admin/export/users", config);
+  const response = await api.get<Blob>("/v1/admin/export/users", config);
   return response.data;
 }
 
 export async function uploadUserImg(payloud: UploadImageDto) {
-  const response = await api.post<UserImageDto>("/user/image", payloud);
+  const response = await api.post<UserImageDto>("/v1/user/image", payloud);
   return response.data;
 }
 
 export async function uploadUserImages(payloud: UploadImageDto) {
-  const response = await api.post<UserImageDto[]>("/user/images", payloud);
+  const response = await api.post<UserImageDto[]>("/v1/user/images", payloud);
   return response.data;
 }
 
 export async function setUserImgByImageld(imageId: ResourceId) {
-  const response = await api.patch<UserImageDto>(`/user/image/${imageId}/main`);
+  const response = await api.patch<UserImageDto>(`/v1/user/image/${imageId}/main`);
   return response.data;
 }
 
@@ -240,7 +243,7 @@ export async function deleteUserImg(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/user/image/${imageId}`,
+    `/v1/user/image/${imageId}`,
     config,
   );
   return response.data;
@@ -248,7 +251,7 @@ export async function deleteUserImg(
 
 export async function uploadUserCoverImg(payloud: UploadImageDto) {
   const response = await api.post<UserCoverImageDto>(
-    "/user/cover/image",
+    "/v1/user/cover/image",
     payloud,
   );
   return response.data;
@@ -259,7 +262,7 @@ export async function uploadImgByImageld(
   payloud: UpdateImageDto,
 ) {
   const response = await api.patch<UserCoverImageDto>(
-    `/user/cover/image/${imageId}`,
+    `/v1/user/cover/image/${imageId}`,
     payloud,
   );
   return response.data;
@@ -270,63 +273,63 @@ export async function deleteUserCoverImg(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/user/cover/image/${imageId}`,
+    `/v1/user/cover/image/${imageId}`,
     config,
   );
   return response.data;
 }
 
 export async function userSavedPost(payloud: SavedPostDto) {
-  const response = await api.post<UserSavedPostDto>("/saved-post", payloud);
+  const response = await api.post<UserSavedPostDto>("/v1/saved-post", payloud);
   return response.data;
 }
 
 export async function allPostsSavedByUser(config?: RequestConfig) {
   const response = await api.get<PageDto<UserSavedPostDto>>(
-    "/saved-post",
+    "/v1/saved-post",
     config,
   );
   return response.data;
 }
 
 export async function createDream(payloud: CreateDreamDto) {
-  const response = await api.post<CreateDreamResponse>("/dreams", payloud);
+  const response = await api.post<CreateDreamResponse>("/v1/dreams", payloud);
   return response.data;
 }
 
 export async function allDreams(config?: RequestConfig) {
-  const response = await api.get<PageDto<DreamDto>>("/dreams", config);
+  const response = await api.get<PageDto<DreamDto>>("/v1/dreams", config);
   return response.data;
 }
 
 export async function userDreams(userId: ResourceId, config?: RequestConfig) {
   const response = await api.get<PageDto<DreamDto>>(
-    `/dreams/users/${userId}`,
+    `/v1/dreams/users/${userId}`,
     config,
   );
   return response.data;
 }
 
 export async function newDreams(config?: RequestConfig) {
-  const response = await api.get<PageDto<DreamDto>>("/new-dreams", config);
+  const response = await api.get<PageDto<DreamDto>>("/v1/new-dreams", config);
   return response.data;
 }
 
 export async function adminDreams(config?: RequestConfig) {
-  const response = await api.get<PageDto<DreamDto>>("/admin/dreams", config);
+  const response = await api.get<PageDto<DreamDto>>("/v1/admin/dreams", config);
   return response.data;
 }
 
 export async function adminDreamCheck(config?: RequestConfig) {
   const response = await api.get<DreamAdminCheckDto[]>(
-    "/admin/dream-check",
+    "/v1/admin/dream-check",
     config,
   );
   return response.data;
 }
 
 export async function dreamById(dreamId: ResourceId, config?: RequestConfig) {
-  const response = await api.get<DreamResponse>(`/dreams/${dreamId}`, config);
+  const response = await api.get<DreamResponse>(`/v1/dreams/${dreamId}`, config);
   return response.data;
 }
 
@@ -335,14 +338,14 @@ export async function updateDream(
   payloud: UpdateDreamDto,
 ) {
   const response = await api.patch<UpdateDreamResponse>(
-    `/dreams/${dreamId}`,
+    `/v1/dreams/${dreamId}`,
     payloud,
   );
   return response.data;
 }
 
 export async function publicDreams(config?: RequestConfig) {
-  const response = await api.get<DreamResponse>("/p/dreams", config);
+  const response = await api.get<DreamResponse>("/v1/p/dreams", config);
   return response.data;
 }
 
@@ -351,14 +354,14 @@ export async function publicDreamAngel(
   config?: RequestConfig,
 ) {
   const response = await api.get<UserInfoDto>(
-    `/p/dreams/angel/${userId}`,
+    `/v1/p/dreams/angel/${userId}`,
     config,
   );
   return response.data;
 }
 
 export async function likeDream(dreamId: ResourceId) {
-  const response = await api.patch<DreamDto>(`/dreams/${dreamId}/like`);
+  const response = await api.patch<DreamDto>(`/v1/dreams/${dreamId}/like`);
   return response.data;
 }
 
@@ -367,14 +370,14 @@ export async function deleteDreamById(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/admin/dreams/${dreamId}`,
+    `/v1/admin/dreams/${dreamId}`,
     config,
   );
   return response.data;
 }
 
 export async function restoreDreamById(dreamId: ResourceId) {
-  const response = await api.patch<void>(`/admin/restore/dreams/${dreamId}`);
+  const response = await api.patch<void>(`/v1/admin/restore/dreams/${dreamId}`);
   return response.data;
 }
 
@@ -383,7 +386,7 @@ export async function uploadDreamImg(
   payloud: UploadImageDto,
 ) {
   const response = await api.post<import("./types").DreamImageDto>(
-    `/dream/${dreamId}/image`,
+    `/v1/dream/${dreamId}/image`,
     payloud,
   );
   return response.data;
@@ -394,7 +397,7 @@ export async function uploadDreamImages(
   payloud: UploadImageDto,
 ) {
   const response = await api.post<import("./types").DreamImageDto[]>(
-    `/dream/${dreamId}/images`,
+    `/v1/dream/${dreamId}/images`,
     payloud,
   );
   return response.data;
@@ -406,7 +409,7 @@ export async function setDreamImgByImageId(
   payloud: UpdateImageDto,
 ) {
   const response = await api.patch<import("./types").DreamImageDto>(
-    `/dream/${dreamId}/image/${imageId}/main`,
+    `/v1/dream/${dreamId}/image/${imageId}/main`,
     payloud,
   );
   return response.data;
@@ -418,7 +421,7 @@ export async function deleteDreamImg(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/dream/${dreamId}/image/${imageId}`,
+    `/v1/dream/${dreamId}/image/${imageId}`,
     config,
   );
   return response.data;
@@ -426,7 +429,7 @@ export async function deleteDreamImg(
 
 export async function newsFeeds(config?: RequestConfig) {
   const response = await api.get<import("./types").NewsFeedDto>(
-    "/news-feeds",
+    "/v1/news-feeds",
     config,
   );
   return response.data;
@@ -434,7 +437,7 @@ export async function newsFeeds(config?: RequestConfig) {
 
 export async function likeNewsFeed(postId: ResourceId) {
   const response = await api.patch<import("./types").NewsFeedDto>(
-    `/news-feeds/${postId}/like`,
+    `/v1/news-feeds/${postId}/like`,
   );
   return response.data;
 }
@@ -444,7 +447,7 @@ export async function newsFeedDreamAngel(
   config?: RequestConfig,
 ) {
   const response = await api.get<import("./types").NewsFeedDreamAngelDto>(
-    `/news-feeds/${postId}/dream-angel`,
+    `/v1/news-feeds/${postId}/dream-angel`,
     config,
   );
   return response.data;
@@ -452,7 +455,7 @@ export async function newsFeedDreamAngel(
 
 export async function shareNotification(payloud: CreateShareNotificationDto) {
   const response = await api.post<NotificationDto>(
-    "/notifications/share",
+    "/v1/notifications/share",
     payloud,
   );
   return response.data;
@@ -460,7 +463,7 @@ export async function shareNotification(payloud: CreateShareNotificationDto) {
 
 export async function notifications(config?: RequestConfig) {
   const response = await api.get<PageDto<NotificationDto>>(
-    "/notifications",
+    "/v1/notifications",
     config,
   );
   return response.data;
@@ -469,24 +472,24 @@ export async function notifications(config?: RequestConfig) {
 export async function createNotification(
   payloud: NotificationCreationParamsDto,
 ) {
-  const response = await api.post<NotificationDto>("/notifications", payloud);
+  const response = await api.post<NotificationDto>("/v1/notifications", payloud);
   return response.data;
 }
 
 export async function checkNotification(payloud: CheckNotificationDto) {
-  const response = await api.patch<void>("/notifications/check", payloud);
+  const response = await api.patch<void>("/v1/notifications/check", payloud);
   return response.data;
 }
 
 export async function checkAllNotifications() {
-  const response = await api.patch<void>("/notifications/check-all");
+  const response = await api.patch<void>("/v1/notifications/check-all");
   return response.data;
 }
 
 export async function checkNotificationsPage(
   payloud: UpdateNotificationStatusDto,
 ) {
-  const response = await api.patch<void>("/notifications/check-page", payloud);
+  const response = await api.patch<void>("/v1/notifications/check-page", payloud);
   return response.data;
 }
 
@@ -494,24 +497,24 @@ export async function createAdminNotification(
   payloud: CreateAdminNotificationDto,
 ) {
   const response = await api.post<NotificationDto>(
-    "/notifications/admin",
+    "/v1/notifications/admin",
     payloud,
   );
   return response.data;
 }
 
 export async function createDonation(payloud: CreateDonationDto) {
-  const response = await api.post<DonationDto>("/donations", payloud);
+  const response = await api.post<DonationDto>("/v1/donations", payloud);
   return response.data;
 }
 
 export async function createWingDonation(payloud: CreateWingDonationDto) {
-  const response = await api.post<WingDonationDto>("/wing-donations", payloud);
+  const response = await api.post<WingDonationDto>("/v1/wing-donations", payloud);
   return response.data;
 }
 
 export async function randomDonation() {
-  const response = await api.post<DonationDto>("/donations/random");
+  const response = await api.post<DonationDto>("/v1/donations/random");
   return response.data;
 }
 
@@ -520,7 +523,7 @@ export async function donationsByUser(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<DonationDto>>(
-    `/donations/users/${userId}`,
+    `/v1/donations/users/${userId}`,
     config,
   );
   return response.data;
@@ -531,7 +534,7 @@ export async function donationsByDream(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<DonationDto>>(
-    `/donations/dreams/${dreamId}`,
+    `/v1/donations/dreams/${dreamId}`,
     config,
   );
   return response.data;
@@ -539,7 +542,7 @@ export async function donationsByDream(
 
 export async function adminDonations(config?: RequestConfig) {
   const response = await api.get<PageDto<DonationDto>>(
-    "/admin/donations",
+    "/v1/admin/donations",
     config,
   );
   return response.data;
@@ -550,7 +553,7 @@ export async function wingDonationsByUser(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<WingDonationDto>>(
-    `/wing-donations/users/${userId}`,
+    `/v1/wing-donations/users/${userId}`,
     config,
   );
   return response.data;
@@ -561,7 +564,7 @@ export async function wingDonationsByCharity(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<WingDonationDto>>(
-    `/p/wing-donations/charities/${charityId}`,
+    `/v1/p/wing-donations/charities/${charityId}`,
     config,
   );
   return response.data;
@@ -569,33 +572,33 @@ export async function wingDonationsByCharity(
 
 export async function adminWingDonations(config?: RequestConfig) {
   const response = await api.get<PageDto<WingDonationDto>>(
-    "/admin/wing-donations",
+    "/v1/admin/wing-donations",
     config,
   );
   return response.data;
 }
 
 export async function lastDonations(config?: RequestConfig) {
-  const response = await api.get<DonationDto[]>("/donations/last", config);
+  const response = await api.get<DonationDto[]>("/v1/donations/last", config);
   return response.data;
 }
 
 export async function topDonorsThisMonth(config?: RequestConfig) {
   const response = await api.get<TopDonorDto[]>(
-    "/donations/top-donors-this-month",
+    "/v1/donations/top-donors-this-month",
     config,
   );
   return response.data;
 }
 
 export async function createCharity(payloud: CreateCharityDto) {
-  const response = await api.post<CharityResponse>("/admin/charities", payloud);
+  const response = await api.post<CharityResponse>("/v1/admin/charities", payloud);
   return response.data;
 }
 
 export async function adminCharities(config?: RequestConfig) {
   const response = await api.get<PageDto<import("./types").CharityDto>>(
-    "/admin/charities",
+    "/v1/admin/charities",
     config,
   );
   return response.data;
@@ -603,7 +606,7 @@ export async function adminCharities(config?: RequestConfig) {
 
 export async function charities(config?: RequestConfig) {
   const response = await api.get<PageDto<import("./types").CharityDto>>(
-    "/charities",
+    "/v1/charities",
     config,
   );
   return response.data;
@@ -614,7 +617,7 @@ export async function charityById(
   config?: RequestConfig,
 ) {
   const response = await api.get<CharityResponse>(
-    `/charities/${charityId}`,
+    `/v1/charities/${charityId}`,
     config,
   );
   return response.data;
@@ -625,7 +628,7 @@ export async function publicCharityById(
   config?: RequestConfig,
 ) {
   const response = await api.get<CharityResponse>(
-    `/p/charities/${charityId}`,
+    `/v1/p/charities/${charityId}`,
     config,
   );
   return response.data;
@@ -636,7 +639,7 @@ export async function updateCharity(
   payloud: import("./types").UpdateCharityDto,
 ) {
   const response = await api.patch<CharityResponse>(
-    `/admin/charities/${charityId}`,
+    `/v1/admin/charities/${charityId}`,
     payloud,
   );
   return response.data;
@@ -647,7 +650,7 @@ export async function deleteCharityById(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/admin/charities/${charityId}`,
+    `/v1/admin/charities/${charityId}`,
     config,
   );
   return response.data;
@@ -655,14 +658,14 @@ export async function deleteCharityById(
 
 export async function restoreCharityById(charityId: ResourceId) {
   const response = await api.patch<void>(
-    `/admin/restore/charities/${charityId}`,
+    `/v1/admin/restore/charities/${charityId}`,
   );
   return response.data;
 }
 
 export async function likeCharity(charityId: ResourceId) {
   const response = await api.patch<CharityResponse>(
-    `/charities/${charityId}/like`,
+    `/v1/charities/${charityId}/like`,
   );
   return response.data;
 }
@@ -670,14 +673,14 @@ export async function likeCharity(charityId: ResourceId) {
 export async function myActivity(config?: RequestConfig) {
   const response = await api.get<
     import("./types").PageDto<import("./types").ActivityDto>
-  >("/me/activity", config);
+  >("/v1/me/activity", config);
   return response.data;
 }
 
 export async function userActivity(userId: ResourceId, config?: RequestConfig) {
   const response = await api.get<
     import("./types").PageDto<import("./types").ActivityDto>
-  >(`/me/${userId}/activity`, config);
+  >(`/v1/me/${userId}/activity`, config);
   return response.data;
 }
 
@@ -686,7 +689,7 @@ export async function uploadCharityImg(
   payloud: UploadImageDto,
 ) {
   const response = await api.post<import("./types").CharityImageDto>(
-    `/admin/charity/${charityId}/image`,
+    `/v1/admin/charity/${charityId}/image`,
     payloud,
   );
   return response.data;
@@ -697,7 +700,7 @@ export async function uploadCharityImages(
   payloud: UploadImageDto,
 ) {
   const response = await api.post<import("./types").CharityImageDto[]>(
-    `/admin/charity/${charityId}/images`,
+    `/v1/admin/charity/${charityId}/images`,
     payloud,
   );
   return response.data;
@@ -709,7 +712,7 @@ export async function setCharityImgByImageId(
   payloud: UpdateImageDto,
 ) {
   const response = await api.patch<import("./types").CharityImageDto>(
-    `/admin/charity/${charityId}/image/${imageId}/main`,
+    `/v1/admin/charity/${charityId}/image/${imageId}/main`,
     payloud,
   );
   return response.data;
@@ -721,14 +724,14 @@ export async function deleteCharityImg(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/admin/charity/${charityId}/image/${imageId}`,
+    `/v1/admin/charity/${charityId}/image/${imageId}`,
     config,
   );
   return response.data;
 }
 
 export async function createDreamComment(payloud: CreateDreamCommentDto) {
-  const response = await api.post<DreamCommentDto>("/dreams/comments", payloud);
+  const response = await api.post<DreamCommentDto>("/v1/dreams/comments", payloud);
   return response.data;
 }
 
@@ -737,7 +740,7 @@ export async function updateDreamComment(
   payloud: UpdateDreamCommentDto,
 ) {
   const response = await api.patch<DreamCommentDto>(
-    `/dreams/comments/${dreamCommentId}`,
+    `/v1/dreams/comments/${dreamCommentId}`,
     payloud,
   );
   return response.data;
@@ -748,7 +751,7 @@ export async function deleteDreamComment(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/dreams/comments/${dreamCommentId}`,
+    `/v1/dreams/comments/${dreamCommentId}`,
     config,
   );
   return response.data;
@@ -759,7 +762,7 @@ export async function dreamComments(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<DreamCommentDto>>(
-    `/dreams/${dreamId}/comments`,
+    `/v1/dreams/${dreamId}/comments`,
     config,
   );
   return response.data;
@@ -771,7 +774,7 @@ export async function dreamCommentById(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<DreamCommentDto>>(
-    `/dream/${dreamId}/comments/${commentId}`,
+    `/v1/dream/${dreamId}/comments/${commentId}`,
     config,
   );
   return response.data;
@@ -782,7 +785,7 @@ export async function publicDreamComments(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<DreamCommentDto>>(
-    `/p/dreams/${dreamId}/comments`,
+    `/v1/p/dreams/${dreamId}/comments`,
     config,
   );
   return response.data;
@@ -790,7 +793,7 @@ export async function publicDreamComments(
 
 export async function createCharityComment(payloud: CreateCharityCommentDto) {
   const response = await api.post<CharityCommentDto>(
-    "/charities/comments",
+    "/v1/charities/comments",
     payloud,
   );
   return response.data;
@@ -801,7 +804,7 @@ export async function updateCharityComment(
   payloud: UpdateCharityCommentDto,
 ) {
   const response = await api.patch<CharityCommentDto>(
-    `/charitites/comments/${commentId}`,
+    `/v1/charitites/comments/${commentId}`,
     payloud,
   );
   return response.data;
@@ -812,7 +815,7 @@ export async function charityComments(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<CharityCommentDto>>(
-    `/charitites/${charityId}/comments`,
+    `/v1/charitites/${charityId}/comments`,
     config,
   );
   return response.data;
@@ -824,7 +827,7 @@ export async function charityCommentById(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<CharityCommentDto>>(
-    `/charities/${charityId}/comments/${commentId}`,
+    `/v1/charities/${charityId}/comments/${commentId}`,
     config,
   );
   return response.data;
@@ -835,7 +838,7 @@ export async function publicCharityComments(
   config?: RequestConfig,
 ) {
   const response = await api.get<PageDto<CharityCommentDto>>(
-    `/p/charities/${charityId}/comments`,
+    `/v1/p/charities/${charityId}/comments`,
     config,
   );
   return response.data;
@@ -846,35 +849,35 @@ export async function deleteCharityComment(
   config?: RequestConfig,
 ) {
   const response = await api.delete<ApiResponse>(
-    `/charities/comments/${charityCommentId}`,
+    `/v1/charities/comments/${charityCommentId}`,
     config,
   );
   return response.data;
 }
 
 export async function verifyEmail(payloud: EmailDto) {
-  const response = await api.post<void>("/email/verify", payloud);
+  const response = await api.post<void>("/v1/email/verify", payloud);
   return response.data;
 }
 
 export async function confirmEmail() {
-  const response = await api.post<void>("/email/confirm");
+  const response = await api.post<void>("/v1/email/confirm");
   return response.data;
 }
 
 export async function payments(config?: RequestConfig) {
-  const response = await api.get<PaymentResponse>("/payments", config);
+  const response = await api.get<PaymentResponse>("/v1/payments", config);
   return response.data;
 }
 
 export async function paymentsConfig(config?: RequestConfig) {
-  const response = await api.get<PaymentResponse>("/payments/config", config);
+  const response = await api.get<PaymentResponse>("/v1/payments/config", config);
   return response.data;
 }
 
 export async function createCheckoutSession(payloud: CreateCheckoutSessionDto) {
   const response = await api.post<PaymentResponse>(
-    "/payments/checkout-session",
+    "/v1/payments/checkout-session",
     payloud,
   );
   return response.data;
@@ -884,7 +887,7 @@ export async function createCustomerPortalSession(
   payloud: CreateCustomerPortalSessionDto,
 ) {
   const response = await api.post<PaymentResponse>(
-    "/payments/customer-portal-session",
+    "/v1/payments/customer-portal-session",
     payloud,
   );
   return response.data;
@@ -895,20 +898,20 @@ export async function checkoutSession(
   config?: RequestConfig,
 ) {
   const response = await api.get<PaymentResponse>(
-    `/payments/checkout-session/${sessionId}`,
+    `/v1/payments/checkout-session/${sessionId}`,
     config,
   );
   return response.data;
 }
 
 export async function adminPayments(config?: RequestConfig) {
-  const response = await api.get<PaymentResponse>("/admin/payments", config);
+  const response = await api.get<PaymentResponse>("/v1/admin/payments", config);
   return response.data;
 }
 
 export async function subscriptions(config?: RequestConfig) {
   const response = await api.get<PaymentResponse>(
-    "/payments/subscriptions",
+    "/v1/payments/subscriptions",
     config,
   );
   return response.data;
@@ -919,20 +922,20 @@ export async function cancelSubscription(
   config?: RequestConfig,
 ) {
   const response = await api.delete<PaymentResponse>(
-    `/payments/subscriptions/${subscriptionId}`,
+    `/v1/payments/subscriptions/${subscriptionId}`,
     config,
   );
   return response.data;
 }
 
 export async function stripeWebhook(config?: RequestConfig) {
-  const response = await api.post<void>("/stripe-webhook", undefined, config);
+  const response = await api.post<void>("/v1/stripe-webhook", undefined, config);
   return response.data;
 }
 
 export async function stripeSubscriptionStatus(config?: RequestConfig) {
   const response = await api.get<PaymentResponse>(
-    "/stripe-webhook/subscription-status",
+    "/v1/stripe-webhook/subscription-status",
     config,
   );
   return response.data;
@@ -940,7 +943,7 @@ export async function stripeSubscriptionStatus(config?: RequestConfig) {
 
 export async function createFeedback(payloud: CreateFeedbackDto) {
   const response = await api.post<import("./types").FeedbackDto>(
-    "/feedbacks",
+    "/v1/feedbacks",
     payloud,
   );
   return response.data;
@@ -948,7 +951,7 @@ export async function createFeedback(payloud: CreateFeedbackDto) {
 
 export async function adminFeedbacks(config?: RequestConfig) {
   const response = await api.get<PageDto<import("./types").FeedbackDto>>(
-    "/admin/feedbacks",
+    "/v1/admin/feedbacks",
     config,
   );
   return response.data;
@@ -959,7 +962,7 @@ export async function feedbackById(
   config?: RequestConfig,
 ) {
   const response = await api.get<import("./types").FeedbackDto>(
-    `/admin/feedbacks/${feedbackId}`,
+    `/v1/admin/feedbacks/${feedbackId}`,
     config,
   );
   return response.data;
@@ -970,7 +973,7 @@ export async function deleteFeedbackById(
   config?: RequestConfig,
 ) {
   const response = await api.delete<void>(
-    `/admin/feedbacks/${feedbackId}`,
+    `/v1/admin/feedbacks/${feedbackId}`,
     config,
   );
   return response.data;
@@ -978,7 +981,7 @@ export async function deleteFeedbackById(
 
 export async function createPayout(payloud: CreatePayoutDto) {
   const response = await api.post<import("./types").PayoutDto>(
-    "/payouts",
+    "/v1/payouts",
     payloud,
   );
   return response.data;
@@ -986,7 +989,7 @@ export async function createPayout(payloud: CreatePayoutDto) {
 
 export async function payouts(config?: RequestConfig) {
   const response = await api.get<import("./types").PayoutDto[]>(
-    "/payouts",
+    "/v1/payouts",
     config,
   );
   return response.data;
@@ -997,7 +1000,7 @@ export async function dreamPayouts(
   config?: RequestConfig,
 ) {
   const response = await api.get<import("./types").PayoutDto[]>(
-    `/payouts/dreams/${dreamId}`,
+    `/v1/payouts/dreams/${dreamId}`,
     config,
   );
   return response.data;
@@ -1005,7 +1008,7 @@ export async function dreamPayouts(
 
 export async function adminPayouts(config?: RequestConfig) {
   const response = await api.get<PageDto<import("./types").PayoutDto>>(
-    "/admin/payouts",
+    "/v1/admin/payouts",
     config,
   );
   return response.data;
@@ -1013,7 +1016,7 @@ export async function adminPayouts(config?: RequestConfig) {
 
 export async function payoutById(payoutId: ResourceId, config?: RequestConfig) {
   const response = await api.get<import("./types").PayoutDto>(
-    `/admin/payouts/${payoutId}`,
+    `/v1/admin/payouts/${payoutId}`,
     config,
   );
   return response.data;
@@ -1024,18 +1027,18 @@ export async function updatePayout(
   payloud: UpdatePayoutDto,
 ) {
   const response = await api.patch<import("./types").PayoutDto>(
-    `/admin/payouts/${payoutId}`,
+    `/v1/admin/payouts/${payoutId}`,
     payloud,
   );
   return response.data;
 }
 
 export async function messages(config?: RequestConfig) {
-  const response = await api.get<MessageResponse>("/messages", config);
+  const response = await api.get<MessageResponse>("/v1/messages", config);
   return response.data;
 }
 
 export async function acceptMessageRequest(toUserId: ResourceId) {
-  const response = await api.post<void>(`/messages/accept-request/${toUserId}`);
+  const response = await api.post<void>(`/v1/messages/accept-request/${toUserId}`);
   return response.data;
 }

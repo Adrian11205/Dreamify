@@ -24,6 +24,14 @@
   --color-chart-3: var(--chart-3);
   --color-chart-2: var(--chart-2);
   --color-chart-1: var(--chart-1);
+  --color-blues: var(--blues);
+  --color-filter-black: var(--filter-black);
+  --color-filter-white: var(--filter-white);
+  --color-auth-button-foreground: var(--auth-button-foreground);
+  --color-auth-link: var(--auth-link);
+  --color-success: var(--success);
+  --background-image-auth: var(--auth-background);
+  --shadow-auth-card: var(--auth-shadow);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -88,6 +96,19 @@
     rgb(236, 197, 237),
     rgb(242, 220, 175)
   );
+  --blues: #0e53dc;
+  --filter-black: #000000;
+  --filter-white: #ffffff;
+  --auth-background: linear-gradient(
+    115deg,
+    #dff4ef 0%,
+    #f6eff4 52%,
+    #fff5dc 100%
+  );
+  --auth-shadow: 0 10px 30px rgb(40 50 60 / 10%);
+  --auth-button-foreground: #1e293b;
+  --auth-link: #0e7490;
+  --success: #22c55e;
 }
 
 .dark {
@@ -128,6 +149,19 @@
     rgb(236, 197, 237),
     rgb(242, 220, 175)
   );
+  --blues: #0e53dc;
+  --filter-black: #000000;
+  --filter-white: #ffffff;
+  --auth-background: linear-gradient(
+    115deg,
+    #dff4ef 0%,
+    #f6eff4 52%,
+    #fff5dc 100%
+  );
+  --auth-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+  --auth-button-foreground: #1e293b;
+  --auth-link: #67e8f9;
+  --success: #4ade80;
 }
 
 @layer base {
