@@ -21,18 +21,18 @@ function Header() {
     const isTransparent = isHomePage && !scrolled;
 
     return (
-        <header className={isTransparent ? "fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-end bg-transparent px-5 transition-colors" : "fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-end bg-filter-white px-5 shadow-md transition-colors"}>
+        <header className={isTransparent ? "fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-end bg-transparent px-5 transition-colors" : "fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-end bg-filter-white px-5  transition-colors"}>
             <div className="flex items-center gap-3">
 
                 {isAuth ? (
                     <>
-                    <Link
+                        <Link
                             href={"/"}
                             className={isTransparent ? "absolute left-5 top-1/2 flex w-fit -translate-y-1/2 flex-col items-center justify-center text-[9px] font-semibold tracking-[0.42em] text-filter-white" : "absolute left-5 top-1/2 flex w-fit -translate-y-1/2 flex-col items-center justify-center text-[9px] font-semibold tracking-[0.42em] text-filter-black"}>
                             <span className={isTransparent ? "mb-1 block h-px w-11 -rotate-6 bg-filter-white" : "mb-1 block h-px w-11 -rotate-6 bg-filter-black"} />
                             DREAMERZ
                         </Link>
-                        <Account/>
+                        <Account />
                     </>
                 ) : (
                     <>
