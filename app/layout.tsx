@@ -29,12 +29,12 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} min-h-full bg-foreground antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full bg-foreground antialiased`}
     >
       <body className="flex min-h-screen flex-col bg-foreground">
         <QueryProvider>
           <Header />
-          {children}
+          <main className="flex-1">{children}</main>
           <Footer />
         </QueryProvider>
       </body>

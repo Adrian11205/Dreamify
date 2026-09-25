@@ -27,7 +27,7 @@ function ChangeProfile() {
         <AuthGuard>
             <form onSubmit={handleSubmit(onSubmit)} className="min-h-screen">
                 <div className="flex min-h-screen items-center justify-center bg-accent px-4 py-10">
-                    <div className="w-full max-w-xl">
+                    <div className="w-full max-w-md">
                         <div className="h-fit w-full rounded-2xl border border-border bg-background p-6 shadow-lg">
 
                             <SidebarProfile/>

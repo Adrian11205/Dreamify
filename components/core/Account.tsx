@@ -3,6 +3,7 @@
 import {
   ChevronDown,
   User,
+  Send
 } from "lucide-react";
 import { FaUserCircle } from "react-icons/fa";
 import SignOutAccount from "./SignOut";
@@ -57,6 +58,15 @@ function Account() {
             className="flex items-center gap-2 cursor-pointer">
             <User className="w-4 h-4" />
             {("profile")}
+          </Link>
+        </DropdownMenuItem>
+
+         <DropdownMenuItem className="gap-3 border-b  cursor-pointer rounded-none hover:bg-accent hover:text-accent-foreground">
+          <Link
+            href={"/chat"}
+            className="flex items-center gap-2 cursor-pointer">
+            <Send className="w-4 h-4" />
+            {("Chat List")}
           </Link>
         </DropdownMenuItem>
 

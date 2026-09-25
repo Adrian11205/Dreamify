@@ -234,7 +234,9 @@ export async function uploadUserImages(payloud: UploadImageDto) {
 }
 
 export async function setUserImgByImageld(imageId: ResourceId) {
-  const response = await api.patch<UserImageDto>(`/v1/user/image/${imageId}/main`);
+  const response = await api.patch<UserImageDto>(
+    `/v1/user/image/${imageId}/main`,
+  );
   return response.data;
 }
 
@@ -329,7 +331,10 @@ export async function adminDreamCheck(config?: RequestConfig) {
 }
 
 export async function dreamById(dreamId: ResourceId, config?: RequestConfig) {
-  const response = await api.get<DreamResponse>(`/v1/dreams/${dreamId}`, config);
+  const response = await api.get<DreamResponse>(
+    `/v1/dreams/${dreamId}`,
+    config,
+  );
   return response.data;
 }
 
@@ -472,7 +477,10 @@ export async function notifications(config?: RequestConfig) {
 export async function createNotification(
   payloud: NotificationCreationParamsDto,
 ) {
-  const response = await api.post<NotificationDto>("/v1/notifications", payloud);
+  const response = await api.post<NotificationDto>(
+    "/v1/notifications",
+    payloud,
+  );
   return response.data;
 }
 
@@ -489,7 +497,10 @@ export async function checkAllNotifications() {
 export async function checkNotificationsPage(
   payloud: UpdateNotificationStatusDto,
 ) {
-  const response = await api.patch<void>("/v1/notifications/check-page", payloud);
+  const response = await api.patch<void>(
+    "/v1/notifications/check-page",
+    payloud,
+  );
   return response.data;
 }
 
@@ -509,7 +520,10 @@ export async function createDonation(payloud: CreateDonationDto) {
 }
 
 export async function createWingDonation(payloud: CreateWingDonationDto) {
-  const response = await api.post<WingDonationDto>("/v1/wing-donations", payloud);
+  const response = await api.post<WingDonationDto>(
+    "/v1/wing-donations",
+    payloud,
+  );
   return response.data;
 }
 
@@ -592,7 +606,10 @@ export async function topDonorsThisMonth(config?: RequestConfig) {
 }
 
 export async function createCharity(payloud: CreateCharityDto) {
-  const response = await api.post<CharityResponse>("/v1/admin/charities", payloud);
+  const response = await api.post<CharityResponse>(
+    "/v1/admin/charities",
+    payloud,
+  );
   return response.data;
 }
 
@@ -731,7 +748,10 @@ export async function deleteCharityImg(
 }
 
 export async function createDreamComment(payloud: CreateDreamCommentDto) {
-  const response = await api.post<DreamCommentDto>("/v1/dreams/comments", payloud);
+  const response = await api.post<DreamCommentDto>(
+    "/v1/dreams/comments",
+    payloud,
+  );
   return response.data;
 }
 
@@ -871,7 +891,10 @@ export async function payments(config?: RequestConfig) {
 }
 
 export async function paymentsConfig(config?: RequestConfig) {
-  const response = await api.get<PaymentResponse>("/v1/payments/config", config);
+  const response = await api.get<PaymentResponse>(
+    "/v1/payments/config",
+    config,
+  );
   return response.data;
 }
 
@@ -929,7 +952,11 @@ export async function cancelSubscription(
 }
 
 export async function stripeWebhook(config?: RequestConfig) {
-  const response = await api.post<void>("/v1/stripe-webhook", undefined, config);
+  const response = await api.post<void>(
+    "/v1/stripe-webhook",
+    undefined,
+    config,
+  );
   return response.data;
 }
 
@@ -1033,12 +1060,20 @@ export async function updatePayout(
   return response.data;
 }
 
-export async function messages(config?: RequestConfig) {
-  const response = await api.get<MessageResponse>("/v1/messages", config);
+export async function messages(toUserId: ResourceId, config?: RequestConfig) {
+  const response = await api.get<MessageResponse>("/v1/messages", {
+    ...config,
+    params: {
+      ...config?.params,
+      to: String(toUserId),
+    },
+  });
   return response.data;
 }
 
 export async function acceptMessageRequest(toUserId: ResourceId) {
-  const response = await api.post<void>(`/v1/messages/accept-request/${toUserId}`);
+  const response = await api.post<void>(
+    `/v1/messages/accept-request/${toUserId}`,
+  );
   return response.data;
 }

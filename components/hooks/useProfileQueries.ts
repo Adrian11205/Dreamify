@@ -165,6 +165,7 @@ function UseProfileQueries(dreamId?: ResourceId) {
       .then((data) => {
         setValue("firstName", data.firstName || "");
         setValue("lastName", data.lastName || "");
+         setValue("email", data.email || "");
         setUser(data);
       })
       .catch((error) => {
@@ -228,7 +229,7 @@ function UseProfileQueries(dreamId?: ResourceId) {
     donationsAllError,
     dreamDonationsError,
     dreamDonationsLoading,
-    dreamDonationsData
+    dreamDonationsData,
   };
 }
 

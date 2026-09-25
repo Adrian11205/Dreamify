@@ -9,7 +9,7 @@ function Footer() {
   const information = ["How it works", "About us", "Terms", "Privacy", "FAQ"];
 
   return (
-    <footer className="relative flex min-h-40.75 flex-col items-center justify-center gap-6 bg-foreground px-6 py-8">
+    <footer className="relative z-50 flex min-h-40.75 flex-col items-center justify-center gap-6 bg-foreground px-6 py-8">
       <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
         {information.map((item, i) => (
           <span
