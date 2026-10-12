@@ -3,9 +3,10 @@ import AuthGuard from "@/components/layout/AuthGuard";
 import { messages, acceptMessageRequest } from "@/api/requests"
 import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { io } from "socket.io-client";
+import { socket } from "@/app/chat/soket";
 
 function ChatPage() {
+
     const params = useParams<{ id: string }>();
     const userId = params.id;
 
@@ -25,7 +26,6 @@ function ChatPage() {
         enabled: Boolean(userId),
     })
 
-    const socket = io("http://localhost:3000");
 
     if (isLoading) return <p>Loading Message </p>
     if (error) return <p>Error</p>

@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import type { UserDto } from "@/api/types"
 import Link from "next/link";
 import { useAuthStore } from "@/stores/useAuthStore";
-
 function ChatListPage() {
     const { isAuth } = useAuthStore()
 
@@ -37,6 +36,7 @@ function ChatListPage() {
                                 <p>Nu există utilizatori disponibili pentru chat.</p>
                             )}
                             <p>Utilizatori găsiți: {users.length}</p>
+
                         </div>
                     </div>
                 </main>
