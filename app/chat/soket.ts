@@ -1,5 +1,10 @@
-import { io } from "socket.io-client";
+import { io, type Socket } from "socket.io-client";
 
-const isBrowser = typeof window !== "undefined";
+let socket: Socket | null = null;
 
-export const socket = isBrowser ? io() : {};
+export default function getSocket(): Socket | null {
+  if (typeof window === "undefined") return null;
+
+  socket ??= io();
+  return socket;
+}

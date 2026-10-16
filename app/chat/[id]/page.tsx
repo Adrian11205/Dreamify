@@ -4,6 +4,7 @@ import { messages, acceptMessageRequest } from "@/api/requests"
 import { useParams } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { socket } from "@/app/chat/soket";
+import Chat from "@/components/chat";
 
 function ChatPage() {
 
@@ -56,6 +57,7 @@ function ChatPage() {
                                 <div key={message.id}>{message.content}</div>
                             ))}
                     </div>
+                    <Chat/>
                 </div>
             </form>
         </AuthGuard>

@@ -4,7 +4,7 @@ import { useState } from "react";
 import AuthGuard from "@/components/layout/AuthGuard";
 import { Eye, EyeOff, Info } from "lucide-react";
 import useProfileQueries from "@/components/hooks/useProfileQueries"
-import SidebarProfile from"@/components/core/SidebarProfile"
+import SidebarProfile from "@/components/core/SidebarProfile"
 
 function ChangeProfile() {
     const [showPassword, setShowPassword] = useState(false);
@@ -13,10 +13,8 @@ function ChangeProfile() {
     const {
         register,
         errors,
-        handleSubmit,
         isEditing,
         handleSave,
-        onSubmit,
         user,
         forgetPasswordMutation,
         replacePasswordMutation,
@@ -25,19 +23,25 @@ function ChangeProfile() {
 
     return (
         <AuthGuard>
-            <form onSubmit={handleSubmit(onSubmit)} className="min-h-screen">
+            <form
+                onSubmit={(event) => {
+                    event.preventDefault();
+                    void handleSave();
+                }}
+                className="min-h-screen"
+            >
                 <div className="flex min-h-screen items-center justify-center bg-accent px-4 py-10">
                     <div className="w-full max-w-md">
                         <div className="h-fit w-full rounded-2xl border border-border bg-background p-6 shadow-lg">
 
-                            <SidebarProfile/>
+                            <SidebarProfile />
                             <div className="flex flex-col items-center mb-6">
                                 <FaUserCircle size={80} />
                                 <h1 className="mt-2 text-lg font-semibold">{("Change Profile")}</h1>
                             </div>
 
                             <div className="flex flex-col gap-1 mb-4">
-                                <span className="text-sm text-chart-4">{("First Name")}</span>
+                                <div className="text-sm text-chart-4">{("First Name")}</div>
                                 <input
                                     type="text"
                                     {...register("firstName")}
@@ -66,6 +70,119 @@ function ChangeProfile() {
                                 <p className="text-destructive text-xs">{errors.lastName.message}</p>
                             )}
 
+                            <div className="flex flex-col gap-1 mb-4">
+                                <span className="text-sm text-chart-3">{("Description")}</span>
+                                <input
+                                    type="text"
+                                    {...register("description")}
+                                    readOnly={!isEditing}
+
+                                    className="border rounded-lg px-3 py-2 text-sm w-full"
+                                />
+                            </div>
+
+                            {errors.description && (
+                                <p className="text-destructive text-xs">{errors.description.message}</p>
+                            )}
+
+                            <div className="flex flex-col gap-1 mb-4">
+                                <span className="text-sm text-chart-3">{("Phone Number")}</span>
+                                <input
+                                    type="text"
+                                    {...register("phoneNumber")}
+                                    readOnly={!isEditing}
+
+                                    className="border rounded-lg px-3 py-2 text-sm w-full"
+                                />
+                            </div>
+
+                            {errors.phoneNumber && (
+                                <p className="text-destructive text-xs">{errors.phoneNumber.message}</p>
+                            )}
+
+                            <div className="flex flex-col gap-1 mb-4">
+                                <span className="text-sm text-chart-3">{("Gender")}</span>
+                                <select
+                                    {...register("gender")}
+                                    disabled={!isEditing}
+                                    className="border rounded-lg px-3 py-2 text-sm w-full"
+                                >
+                                    <option value="">Select gender</option>
+                                    <option value="MALE">Male</option>
+                                    <option value="FEMALE">Female</option>
+                                </select>
+                            </div>
+
+                            {errors.gender && (
+                                <p className="text-destructive text-xs">{errors.gender.message}</p>
+                            )}
+
+                            <div className="flex flex-col gap-1 mb-4">
+                                <span className="text-sm text-chart-3">{("Birthday")}</span>
+                                <input
+                                    type="date"
+                                    {...register("birthday")}
+                                    readOnly={!isEditing}
+
+                                    className="border rounded-lg px-3 py-2 text-sm w-full"
+                                />
+                            </div>
+
+                            {errors.birthday && (
+                                <p className="text-destructive text-xs">{errors.birthday.message}</p>
+                            )}
+
+                            <div className="flex flex-col gap-1 mb-4">
+                                <span className="text-sm text-chart-3">{("City")}</span>
+                                <input
+                                    type="text"
+                                    {...register("city")}
+                                    readOnly={!isEditing}
+
+                                    className="border rounded-lg px-3 py-2 text-sm w-full"
+                                />
+                            </div>
+
+                            {errors.city && (
+                                <p className="text-destructive text-xs">{errors.city.message}</p>
+                            )}
+
+                            <div className="flex flex-col gap-1 mb-4">
+                                <span className="text-sm text-chart-3">{("Country")}</span>
+                                <input
+                                    type="text"
+                                    {...register("country")}
+                                    readOnly={!isEditing}
+
+                                    className="border rounded-lg px-3 py-2 text-sm w-full"
+                                />
+                            </div>
+
+                            {errors.country && (
+                                <p className="text-destructive text-xs">{errors.country.message}</p>
+                            )}
+
+                            <div className="flex flex-col gap-1 mb-4">
+                                <span className="text-sm text-chart-3">{("Onboarding Status")}</span>
+                                <select
+                                    {...register("onboardingStatus")}
+                                    disabled={!isEditing}
+                                    className="border rounded-lg px-3 py-2 text-sm w-full"
+                                >
+                                    <option value="">Select onboarding status</option>
+                                    <option value="WELCOME">Welcome</option>
+                                    <option value="PERSONAL_DATA">Personal data</option>
+                                    <option value="USER_PROFILE">User profile</option>
+                                    <option value="CREATE_DREAM">Create dream</option>
+                                    <option value="SUBSCRIPTION_PLAN">Subscription plan</option>
+                                    <option value="COMPLETED">Completed</option>
+                                </select>
+                            </div>
+
+                            {errors.onboardingStatus && (
+                                <p className="text-destructive text-xs">{errors.onboardingStatus.message}</p>
+                            )}
+
                             <div className="space-y-2">
                                 <label htmlFor="password" className="text-sm text-chart-3">
                                     Password
@@ -73,7 +190,7 @@ function ChangeProfile() {
                                 <div className="relative">
                                     <input
                                         id="password"
-                                        type={showPassword ? "text" : "password"}
+                                        type={showPassword ? "text" : "passworZ"}
                                         {...register("password")}
                                         readOnly={!isEditing}
                                         className="h-11 w-full rounded-lg border border-border px-3 pr-11 text-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20"
@@ -140,10 +257,15 @@ function ChangeProfile() {
                                 </button>
                             </div>
 
+                            {(updateProfileMutation.isError || replacePasswordMutation.isError) && (
+                                <p role="alert" className="mt-4 text-sm text-destructive">
+                                    Failed to save changes. Please try again.
+                                </p>
+                            )}
+
                             <div className="mt-6 flex justify-center">
                                 <button
-                                    type="button"
-                                    onClick={handleSave}
+                                    type="submit"
                                     disabled={updateProfileMutation.isPending || replacePasswordMutation.isPending}
                                     className="flex items-center justify-center gap-3 h-12 w-full max-w-65 px-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-300 "                            >
                                     {updateProfileMutation.isPending || replacePasswordMutation.isPending ? ("Saving") : isEditing ? ("Save Changes") : ("Change Profile")}

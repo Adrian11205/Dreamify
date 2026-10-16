@@ -25,25 +25,82 @@ function UseProfileQueries(dreamId?: ResourceId) {
   const { setUser } = useAuthStore();
   const user = useAuthStore((state) => state.user);
 
-  const schema = z.object({
-    email: z.string(),
-    firstName: z.string().min(2, "passwordMinLength").max(50, "nameMaxLength"),
-    lastName: z.string().min(2, "passwordMinLength").max(50, "nameMaxLength"),
-    password: z
-      .string()
-      .min(8, "Password must be between 8 and 16 characters.")
-      .max(16, "Password must be between 8 and 16 characters.")
-      .refine((value) => /[A-Z]/.test(value) && /[a-z]/.test(value), {
-        message: "Password must include uppercase and lowercase letters.",
-      })
-      .refine((value) => /\d/.test(value), {
-        message: "Password must include one number.",
-      })
-      .refine((value) => /[{};:=<>_+\-^#$@!%*?&]/.test(value), {
-        message: "Password must include one symbol.",
-      }),
-    confirmPassword: z.string().optional(),
-  });
+  const passwordRules = z
+    .string()
+    .min(8, "Password must be between 8 and 16 characters.")
+    .max(16, "Password must be between 8 and 16 characters.")
+    .refine((value) => /[A-Z]/.test(value) && /[a-z]/.test(value), {
+      message: "Password must include uppercase and lowercase letters.",
+    })
+    .refine((value) => /\d/.test(value), {
+      message: "Password must include one number.",
+    })
+    .refine((value) => /[{};:=<>_+\-^#$@!%*?&]/.test(value), {
+      message: "Password must include one symbol.",
+    });
+
+  const schema = z
+    .object({
+      email: z.string().optional(),
+      firstName: z
+        .string()
+        .min(2, "passwordMinLength")
+        .max(50, "nameMaxLength"),
+      lastName: z.string().min(2, "passwordMinLength").max(50, "nameMaxLength"),
+      password: passwordRules.optional().or(z.literal("")),
+      confirmPassword: z.string().optional().or(z.literal("")),
+      description: z.string(),
+      phoneNumber: z
+        .string()
+        .regex(/^\+?[0-9]{8,15}$/, "Phone number is invalid")
+        .or(z.literal("")),
+      gender: z.enum(["MALE", "FEMALE"]).or(z.literal("")),
+      birthday: z
+        .string()
+        .regex(
+          /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/,
+          "Birthday is invalid",
+        )
+        .or(z.literal("")),
+      city: z
+        .string()
+        .regex(/^[\p{L}\p{M}]+(?:[ '-][\p{L}\p{M}]+)*$/u, "City is invalid")
+        .or(z.literal("")),
+      country: z
+        .string()
+        .regex(/^[\p{L}\p{M}]+(?:[ .'-][\p{L}\p{M}]+)*$/u, "Country is invalid")
+        .or(z.literal("")),
+      onboardingStatus: z
+        .enum([
+          "WELCOME",
+          "PERSONAL_DATA",
+          "USER_PROFILE",
+          "CREATE_DREAM",
+          "SUBSCRIPTION_PLAN",
+          "COMPLETED",
+        ])
+        .or(z.literal("")),
+      coverImage: z.any(),
+      monthlySubscriptionId: z.string(),
+      monthlySubscriptionStatus: z.string(),
+      mainImageUrl: z.any(),
+      stripeCustomerId: z.string(),
+      stripeProductId: z.string(),
+    })
+    .superRefine((data, ctx) => {
+      const password = data.password ?? "";
+      const confirmPassword = data.confirmPassword ?? "";
+
+      if (!password && !confirmPassword) return;
+
+      if (!password || password !== confirmPassword) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["confirmPassword"],
+          message: "Passwords must match.",
+        });
+      }
+    });
 
   type Form = z.infer<typeof schema>;
 
@@ -127,6 +184,16 @@ function UseProfileQueries(dreamId?: ResourceId) {
       const data = await profile();
       setValue("firstName", data.firstName || "");
       setValue("lastName", data.lastName || "");
+      setValue("email", data.email || "");
+      setValue("description", data.description || "");
+      setValue("phoneNumber", data.phoneNumber || "");
+      if (data.gender) setValue("gender", data.gender);
+      setValue("birthday", data.birthday || "");
+      setValue("city", data.city || "");
+      setValue("country", data.country || "");
+      if (data.onboardingStatus) {
+        setValue("onboardingStatus", data.onboardingStatus);
+      }
       setUser(data);
       setIsEditing(false);
     },
@@ -165,7 +232,16 @@ function UseProfileQueries(dreamId?: ResourceId) {
       .then((data) => {
         setValue("firstName", data.firstName || "");
         setValue("lastName", data.lastName || "");
-         setValue("email", data.email || "");
+        setValue("email", data.email || "");
+        setValue("description", data.description || "");
+        setValue("phoneNumber", data.phoneNumber || "");
+        if (data.gender) setValue("gender", data.gender);
+        setValue("birthday", data.birthday || "");
+        setValue("city", data.city || "");
+        setValue("country", data.country || "");
+        if (data.onboardingStatus) {
+          setValue("onboardingStatus", data.onboardingStatus);
+        }
         setUser(data);
       })
       .catch((error) => {
@@ -177,15 +253,19 @@ function UseProfileQueries(dreamId?: ResourceId) {
     updateProfileMutation.mutate({
       firstName: data.firstName,
       lastName: data.lastName,
+      birthday: data.birthday,
+      city: data.city,
+      country: data.country,
+      description: data.description,
+      gender: data.gender || undefined,
+      onboardingStatus: data.onboardingStatus || undefined,
+      phoneNumber: data.phoneNumber,
     });
     if (data.password && data.confirmPassword) {
       replacePasswordMutation.mutate({
         password: data.password,
         confirmPassword: data.confirmPassword,
       });
-    }
-    if (data.email) {
-      forgetPasswordMutation.mutate({ email: data.email });
     }
   };
 

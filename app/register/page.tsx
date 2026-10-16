@@ -166,20 +166,54 @@ function Register() {
 
                     <div className="flex flex-col gap-2">
 
-                        <div className={`flex items-center gap-2 text-xs ${hasMinimumLength && passwordsMatch ? "text-success" : "text-muted-foreground"}`}>
-                            {hasMinimumLength && passwordsMatch ? <CheckCircle2 className="h-4 w-4" /> : <Info className="h-4 w-4" />}
+                        <div className="flex items-center gap-2 text-xs">
+                            <span className="relative inline-flex h-4 w-4 shrink-0">
+                                <CheckCircle2
+                                    className={`absolute h-4 w-4 ${hasMinimumLength && passwordsMatch ? "" : "hidden"
+                                        }`}
+                                    aria-hidden="true"
+                                />
+                                <Info
+                                    className={`absolute h-4 w-4 ${hasMinimumLength && passwordsMatch ? "hidden" : ""
+                                        }`}
+                                    aria-hidden="true"
+                                />
+                            </span>
                             Minimum 8 characters
                         </div>
-                        <div className={`flex items-center gap-2 text-xs ${hasUppercase && hasLowercase && passwordsMatch ? "text-success" : "text-muted-foreground"}`}>
-                            {hasUppercase && hasLowercase && passwordsMatch ? <CheckCircle2 className="h-4 w-4" /> : <Info className="h-4 w-4" />}
+                        <div className="flex items-center gap-2 text-xs">
+                            <span className="relative inline-flex h-4 w-4 shrink-0">
+                                <CheckCircle2
+                                    className={`absolute h-4 w-4 ${hasUppercase && hasLowercase && passwordsMatch ? "" : "hidden"
+                                        }`}
+                                    aria-hidden="true"
+                                />
+                                <Info
+                                    className={`absolute h-4 w-4 ${hasUppercase && hasLowercase && passwordsMatch ? "hidden" : ""
+                                        }`}
+                                    aria-hidden="true"
+                                />
+                            </span>
                             Uppercase and lowercase letters
                         </div>
-                        <div className={`flex items-center gap-2 text-xs ${hasSpecialSymbol && passwordsMatch ? "text-success" : "text-muted-foreground"}`}>
-                            {hasSpecialSymbol && passwordsMatch ? <CheckCircle2 className="h-4 w-4" /> : <Info className="h-4 w-4" />}
+                        <div className="flex items-center gap-2 text-xs">
+                            <span className="relative inline-flex h-4 w-4 shrink-0">
+                                <CheckCircle2
+                                    className={`absolute h-4 w-4 ${hasSpecialSymbol && passwordsMatch ? "" : "hidden"
+                                        }`}
+                                    aria-hidden="true"
+                                />
+                                <Info
+                                    className={`absolute h-4 w-4 ${hasSpecialSymbol && passwordsMatch ? "hidden" : ""
+                                        }`}
+                                    aria-hidden="true"
+                                />
+                            </span>
                             At least one special symbol {"{};:=<>_+-^#$@!%*?&"}
                         </div>
 
                     </div>
+
 
                     <button
                         type="submit"
