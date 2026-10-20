@@ -32,9 +32,10 @@ function ChangeProfile() {
             >
                 <div className="flex min-h-screen items-center justify-center bg-accent px-4 py-10">
                     <div className="w-full max-w-md">
-                        <div className="h-fit w-full rounded-2xl border border-border bg-background p-6 shadow-lg">
 
-                            <SidebarProfile />
+                        <SidebarProfile />
+                        <div className="h-fit w-full rounded-2xl border border-border bg-background p-6 shadow-lg translate-8">
+
                             <div className="flex flex-col items-center mb-6">
                                 <FaUserCircle size={80} />
                                 <h1 className="mt-2 text-lg font-semibold">{("Change Profile")}</h1>
@@ -243,6 +244,9 @@ function ChangeProfile() {
                                 )}
                             </div>
 
+
+                           
+
                             <div className="flex justify-end">
                                 <button
                                     type="button"
@@ -266,6 +270,8 @@ function ChangeProfile() {
                             <div className="mt-6 flex justify-center">
                                 <button
                                     type="submit"
+                                      onClick={() => console.log("Butonul a fost apăsat")}
+
                                     disabled={updateProfileMutation.isPending || replacePasswordMutation.isPending}
                                     className="flex items-center justify-center gap-3 h-12 w-full max-w-65 px-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors duration-300 "                            >
                                     {updateProfileMutation.isPending || replacePasswordMutation.isPending ? ("Saving") : isEditing ? ("Save Changes") : ("Change Profile")}

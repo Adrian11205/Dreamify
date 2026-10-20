@@ -80,12 +80,6 @@ function UseProfileQueries(dreamId?: ResourceId) {
           "COMPLETED",
         ])
         .or(z.literal("")),
-      coverImage: z.any(),
-      monthlySubscriptionId: z.string(),
-      monthlySubscriptionStatus: z.string(),
-      mainImageUrl: z.any(),
-      stripeCustomerId: z.string(),
-      stripeProductId: z.string(),
     })
     .superRefine((data, ctx) => {
       const password = data.password ?? "";
@@ -188,7 +182,7 @@ function UseProfileQueries(dreamId?: ResourceId) {
       setValue("description", data.description || "");
       setValue("phoneNumber", data.phoneNumber || "");
       if (data.gender) setValue("gender", data.gender);
-      setValue("birthday", data.birthday || "");
+      setValue("birthday", data.birthday?.slice(0, 10) || "");
       setValue("city", data.city || "");
       setValue("country", data.country || "");
       if (data.onboardingStatus) {
@@ -236,7 +230,7 @@ function UseProfileQueries(dreamId?: ResourceId) {
         setValue("description", data.description || "");
         setValue("phoneNumber", data.phoneNumber || "");
         if (data.gender) setValue("gender", data.gender);
-        setValue("birthday", data.birthday || "");
+        setValue("birthday", data.birthday?.slice(0, 10) || "");
         setValue("city", data.city || "");
         setValue("country", data.country || "");
         if (data.onboardingStatus) {
@@ -261,6 +255,7 @@ function UseProfileQueries(dreamId?: ResourceId) {
       onboardingStatus: data.onboardingStatus || undefined,
       phoneNumber: data.phoneNumber,
     });
+
     if (data.password && data.confirmPassword) {
       replacePasswordMutation.mutate({
         password: data.password,
