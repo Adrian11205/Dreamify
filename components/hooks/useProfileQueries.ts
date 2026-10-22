@@ -10,6 +10,9 @@ import {
   wingDonationsAll,
   donations,
   donationsAll,
+  uploadUserImg,
+  setUserImgByImageld,
+  uploadUserCoverImg,
 } from "@/api/requests";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/useAuthStore";
@@ -80,6 +83,10 @@ function UseProfileQueries(dreamId?: ResourceId) {
           "COMPLETED",
         ])
         .or(z.literal("")),
+      mainImageUrl: z.custom<FileList>().optional(),
+      coverImage: z.custom<FileList>().optional(),
+      monthlySubscriptionId: z.string(),
+      monthlySubscriptionStatus: z.string(),
     })
     .superRefine((data, ctx) => {
       const password = data.password ?? "";
@@ -185,6 +192,11 @@ function UseProfileQueries(dreamId?: ResourceId) {
       setValue("birthday", data.birthday?.slice(0, 10) || "");
       setValue("city", data.city || "");
       setValue("country", data.country || "");
+      setValue("monthlySubscriptionId", data.monthlySubscriptionId || "");
+      setValue(
+        "monthlySubscriptionStatus",
+        data.monthlySubscriptionStatus || "",
+      );
       if (data.onboardingStatus) {
         setValue("onboardingStatus", data.onboardingStatus);
       }
@@ -221,6 +233,24 @@ function UseProfileQueries(dreamId?: ResourceId) {
     },
   });
 
+  const uploadUserImgMutation = useMutation({
+    mutationFn: uploadUserImg,
+    onSuccess: async (image) => {
+      await setUserImgByImageld(image.id);
+
+      const updatedProfile = await profile();
+      setUser(updatedProfile);
+    },
+  });
+
+  const uploadUserCoverImgMutation = useMutation({
+    mutationFn: uploadUserCoverImg,
+   onSuccess: async () => {
+  const updatedProfile = await profile();
+  setUser(updatedProfile);
+},
+  });
+
   useEffect(() => {
     profile()
       .then((data) => {
@@ -233,6 +263,11 @@ function UseProfileQueries(dreamId?: ResourceId) {
         setValue("birthday", data.birthday?.slice(0, 10) || "");
         setValue("city", data.city || "");
         setValue("country", data.country || "");
+        setValue("monthlySubscriptionId", data.monthlySubscriptionId || "");
+        setValue(
+          "monthlySubscriptionStatus",
+          data.monthlySubscriptionStatus || "",
+        );
         if (data.onboardingStatus) {
           setValue("onboardingStatus", data.onboardingStatus);
         }
@@ -255,6 +290,21 @@ function UseProfileQueries(dreamId?: ResourceId) {
       onboardingStatus: data.onboardingStatus || undefined,
       phoneNumber: data.phoneNumber,
     });
+    const file = data.mainImageUrl?.[0];
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      uploadUserImgMutation.mutate(formData);
+    }
+
+    const coverfile = data.coverImage?.[0];
+
+    if (coverfile) {
+      const formData = new FormData();
+      formData.append("image", coverfile);
+      uploadUserCoverImgMutation.mutate(formData);
+    }
 
     if (data.password && data.confirmPassword) {
       replacePasswordMutation.mutate({

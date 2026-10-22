@@ -1,21 +1,22 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRef, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import getSocket from "@/app/chat/soket";
 
 type ChatProps = {
     userId: string;
-    username: string;
+    currentUserId: string;
     setMessages: Dispatch<SetStateAction<Message[]>>;
-    error: string; details: string
 };
 
-type Message = {
+export type Message = {
     id: string;
     from: string;
     to: string;
     content: string;
+    accepted?: boolean;
 };
 
 type MessageError = {
@@ -23,122 +24,122 @@ type MessageError = {
     details: string;
 };
 
-type NewsFeedShared = {
-    postId: string;
-    from: string;
-    to: string[];
-};
-
-type ShareError = {
-    error: string;
-    details: string;
-};
-
-type AcceptRequest = {
+type MessageRequestSent = {
     requestId: string;
-    userId: string
-}
+    from: string;
+    to: string;
+};
 
-type AcceptRequestError = {
-    error: string;
-    details: string;
-}
-type UpdateMessage = {
-    id: string;
-    content: string
-}
+function Chat({ userId, currentUserId, setMessages }: ChatProps) {
+    const [content, setContent] = useState("");
+    const [error, setError] = useState("");
+    const [notice, setNotice] = useState("");
+    const pendingContent = useRef("");
 
-type UpdateError = {
-    error: string;
-    details: string
-}
-
-type MessageDeleted = {
-    id: string
-}
-
-type DeleteError = {
-    error: string;
-    details: string
-}
-
-
-function Chat({ userId, username, setMessages, }: ChatProps) {
     useEffect(() => {
         const socket = getSocket();
         if (!socket) return;
 
-        socket.emit("join-room", { userId });
+        socket.emit("join-room", { userId: currentUserId });
 
         const onMessageCreated = (message: Message) => {
-            setMessages((currentMessages) => [...currentMessages, message]);
+            const belongsToConversation =
+                (message.from === currentUserId && message.to === userId) ||
+                (message.from === userId && message.to === currentUserId);
+            if (!belongsToConversation) return;
+
+            setMessages((currentMessages) =>
+                currentMessages.some((currentMessage) => currentMessage.id === message.id)
+                    ? currentMessages
+                    : [...currentMessages, message],
+            );
         };
 
         const onMessageError = ({ error, details }: MessageError) => {
-            console.error("Eroare la mesaj:", error, details);
+            setError(`${error}: ${details}`);
+        };
+
+        const onRequestSent = (request: MessageRequestSent) => {
+            if (request.from !== currentUserId || request.to !== userId) return;
+
+            setNotice("Cererea de conversație a fost trimisă.");
+            const pendingMessage: Message = {
+                id: `pending-${request.requestId}`,
+                from: request.from,
+                to: request.to,
+                content: pendingContent.current,
+                accepted: false,
+            };
+            setMessages((currentMessages) =>
+                currentMessages.some((message) => message.id === pendingMessage.id)
+                    ? currentMessages
+                    : [...currentMessages, pendingMessage],
+            );
+            pendingContent.current = "";
         };
 
         socket.on("message-created", onMessageCreated);
         socket.on("message-error", onMessageError);
+        socket.on("request-sent", onRequestSent);
 
         return () => {
             socket.off("message-created", onMessageCreated);
             socket.off("message-error", onMessageError);
+            socket.off("request-sent", onRequestSent);
         };
+    }, [currentUserId, setMessages, userId]);
 
-    }, [userId, setMessages]);
+    const sendMessage = () => {
+        const trimmedContent = content.trim();
+        const socket = getSocket();
 
-    const socket = getSocket();
-    if (!socket) return;
+        if (!trimmedContent || !socket) return;
 
-    socket.emit("user-typing", { username })
-    socket.emit("user-stop-typinh", { username })
-
-
-    const onNewsFeedShared = (data: NewsFeedShared) => {
-        console.log("Postarea a fost distribuită", data);
+        setError("");
+        setNotice("");
+        pendingContent.current = trimmedContent;
+        socket.emit("create-message", {
+            from: currentUserId,
+            to: userId,
+            content: trimmedContent,
+        });
+        setContent("");
     };
 
-    const onShareError = (data: ShareError) => {
-        console.error("Nu s-a putut distribui postarea:", data.error, data.details);
+    const handleMessageKeyDown = (
+        event: React.KeyboardEvent<HTMLInputElement>,
+    ) => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendMessage();
+        }
     };
 
-    socket.on("news-feed-shared", onNewsFeedShared);
-    socket.on("share-error", onShareError);
-
-    socket.on("request-accepted", ((data: AcceptRequest) => {
-        console.log("Cererea a fost acceptată", data);
-    }))
-
-    socket.on("request-error", ((data: AcceptRequestError) => {
-        console.error("Eroare la acceptarea cererii:", data.error, data.details);
-    }))
-
-    const updateMessage = (data: UpdateMessage) => {
-        socket.emit("update-message", data)
-    }
-    socket.on("message-updated", (data: UpdateMessage) => {
-        console.log("Mesaj actualizat:", data);
-    });
-
-    socket.on("update-error", (data: UpdateError) => {
-        console.error("Eroare la actualizare:", data.error, data.details);
-    });
-
-    socket.on("message-deleted", ({id}:MessageDeleted) => {
-        setMessages((messages) => messages.filter((message) => message.id !== id));
-    });
-
-    socket.on(
-        "delete-error",
-        ({ error, details }: DeleteError) => {
-            console.error("Nu s-a putut șterge mesajul:", error, details);
-        },
+    return (
+        <div className="flex w-full max-w-md flex-col gap-3">
+            <label htmlFor="chat-message" className="sr-only">Mesaj</label>
+            <div className="flex gap-2">
+                <input
+                    id="chat-message"
+                    value={content}
+                    onChange={(event) => setContent(event.target.value)}
+                    onKeyDown={handleMessageKeyDown}
+                    placeholder="Scrie un mesaj..."
+                    className="min-w-0 flex-1 rounded-lg border border-border bg-background px-3 py-2"
+                />
+                <button
+                    type="button"
+                    onClick={sendMessage}
+                    disabled={!content.trim()}
+                    className="rounded-lg bg-primary px-4 py-2 text-primary-foreground disabled:opacity-50"
+                >
+                    Trimite
+                </button>
+            </div>
+            {notice && <p role="status">{notice}</p>}
+            {error && <p role="alert">{error}</p>}
+        </div>
     );
-
-
-    return <div />;
 }
 
 export default Chat;
-
